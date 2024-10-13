@@ -1,0 +1,78 @@
+# Stock Span Problem Visualization
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Span Problem</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .price {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .span {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Stock Span Visualization</h1>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const prices = [100, 80, 60, 70, 60, 75, 85];
+        const spans = calculateSpan(prices);
+        displayOutput(prices, spans);
+
+        function calculateSpan(prices) {
+            const n = prices.length;
+            const span = new Array(n).fill(1);
+            const stack = [];
+
+            for (let i = 0; i < n; i++) {
+                while (stack.length > 0 && prices[stack[stack.length - 1]] <= prices[i]) {
+                    stack.pop();
+                }
+                span[i] = (stack.length === 0) ? (i + 1) : (i - stack[stack.length - 1]);
+                stack.push(i);
+            }
+            return span;
+        }
+
+        function displayOutput(prices, spans) {
+            const outputDiv = document.getElementById('output');
+            prices.forEach((price, index) => {
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'price';
+                priceDiv.innerHTML = `Price: $${price} <span class="span">Span: ${spans[index]}</span>`;
+                outputDiv.appendChild(priceDiv);
+            });
+        }
+    </script>
+
+</body>
+</html>
